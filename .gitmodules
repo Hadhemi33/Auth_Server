@@ -1,0 +1,3 @@
+[submodule "Auth_Server"]
+	path = Auth_Server
+	url = https://github.com/Hadhemi33/Auth_Server.git
