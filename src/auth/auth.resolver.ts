@@ -7,6 +7,7 @@ import { GqlAuthGuard } from 'src/auth/gql-auth.guard';
 import { User } from 'src/users/entities/user.entity';
 
 @Resolver()
+
 export class AuthResolver {
   constructor(private authService: AuthService) {}
   @Mutation(() => LoginResponse)
