@@ -5,9 +5,10 @@ import { LoginUserInput } from './dto/login-user.input';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/gql-auth.guard';
 import { User } from 'src/users/entities/user.entity';
+import { Any } from 'typeorm';
+import { SignupResponse } from './dto/signup-response';
 
 @Resolver()
-
 export class AuthResolver {
   constructor(private authService: AuthService) {}
   @Mutation(() => LoginResponse)
@@ -19,8 +20,11 @@ export class AuthResolver {
   ) {
     return this.authService.login(context.user);
   }
-  @Mutation(() => User)
-  signup(@Args('loginUserInput') loginUserInput: LoginUserInput) {
+  // @Mutation(() => User)
+  @Mutation(() => SignupResponse)
+  async signup(
+    @Args('loginUserInput') loginUserInput: LoginUserInput,
+  ): Promise<SignupResponse> {
     return this.authService.signup(loginUserInput);
   }
 }

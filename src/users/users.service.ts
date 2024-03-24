@@ -12,42 +12,41 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  private readonly users = [
-    {
-      id: 1,
-      username: 'john',
-      password: 'changeme',
-    },
-    {
-      id: 2,
-      username: 'chris',
-      password: 'secret',
-    },
-  ];
+  // private readonly users = [
+  //   {
+  //     id: 1,
+  //     username: 'john',
+  //     password: 'changeme',
+  //   },
+  //   {
+  //     id: 2,
+  //     username: 'chris',
+  //     password: 'secret',
+  //   },
+  // ];
   async create(createUserInput: CreateUserInput): Promise<User> {
-    // const user = {
-    //   ...createUserInput,
-    //   id: this.users.length + 1,
-    // };
+    const users = await this.usersRepository.create(createUserInput);
 
-    // this.users.push(user);
-    // console.log(this.users);
-    // return user;
-    //
-    const user = {
-      ...createUserInput,
-      id: this.users.length + 1,
-    };
-
-    return await this.usersRepository.create(user);
+    const user = Array.isArray(users) ? users[0] : users;
+    await this.usersRepository.save(user);
+    const { password, ...result } = user;
+    return result;
   }
 
-  findAll() {
+  async findAll(): Promise<User[]> {
     // return this.users;
-    return this.usersRepository.find();
+    return await this.usersRepository.find();
   }
 
-  async findOne(username: string) {
-    return await this.users.find((user) => user.username === username);
+  async findOneByName(username: string): Promise<User> {
+    return await this.usersRepository.findOne({
+      where: { username: username },
+    });
   }
+  async findOneById(id: number): Promise<any> {
+    return this.usersRepository.findOne({ where: { id: id } });
+  }
+  // async update(id: number, createUserInput: CreateUserInput) {
+  //   return await this.usersRepository.update(id, createUserInput);
+  // }
 }
